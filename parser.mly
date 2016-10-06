@@ -9,6 +9,7 @@
 %token EOF EOL
 %token LPAREN RPAREN
 %token LET EQUAL LT LE GT GE OR AND NOT NEQ
+%token LOAD
 %left OR
 %left AND
 %left LT LE GT GE EQ NEQ
@@ -20,10 +21,12 @@
 %start main
 
 %%
+
 main:
  |EOL {Empty}
  |exp EOL {$1}
  |LET ID EQUAL exp EOL {Let($2,$4)}
+ |LOAD ID EOL{Load($2)}
 ;
 exp:
  | INT

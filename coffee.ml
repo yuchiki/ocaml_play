@@ -6,6 +6,7 @@ type value=
 |VInt of int
 |VFloat of float
 |VBool of bool
+|VLoad of string
 |Unit
 
 let print_value v =
@@ -13,6 +14,7 @@ let print_value v =
     VInt i->print_int i
   | VFloat f->print_float f
   | VBool b-> if b then print_string "true" else print_string "false"
+  | VLoad str->print_string ("load(" ^ str ^ ")")
   | Unit->print_string "()"
 
 
@@ -78,22 +80,33 @@ let rec eval e env nest=
   |Not e1->
     (match eval e1 env (nest+1) with
     |VBool b->debug (VBool (not b)) nest)
+  |Load str-> debug (VLoad str) nest
+
+let next_channel value channel=
+  if channel == stdin then
+    match value with
+    |VLoad filename->(open_in filename)
+    |_-> stdin
+  else channel
 
 let _=
   let env=Hashtbl.create 100 in
+  let ch = ref stdin in
   while true do
     try
       print_string ">";flush stdout;
-      let lexbuf = Lexing.from_channel stdin in
+      let lexbuf = Lexing.from_channel !ch in
       let expr = Parser.main Lexer.token lexbuf in
       if expr =Empty then () else(
 	let result=eval expr env 0 in
 	print_value result;
 	print_newline();
-	flush stdout;)
+	flush stdout;
+	ch := next_channel result !ch
+      )
     with
     |Lexer.Eof ->
-      print_string "?\n"
+      ch := stdin;
     |Parsing.Parse_error ->
       print_string "parse_error\n"
     |Undefined id->

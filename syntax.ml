@@ -16,6 +16,7 @@ type t =
 |Not of t
 |And of (t*t)
 |Or of (t*t)
+|Load of string
 |Empty
 
 let rec string_of_expr t=
@@ -37,3 +38,4 @@ let rec string_of_expr t=
   |Or (t1,t2)->"(" ^ (string_of_expr t1) ^ ")" ^ "||" ^ "(" ^ (string_of_expr t2) ^ ")"
   |And (t1,t2)->"(" ^ (string_of_expr t1) ^ ")" ^ "&&" ^ "(" ^ (string_of_expr t2) ^ ")"
   |Not t1->"not(" ^ (string_of_expr t1)^ ")"
+  |Load str->"load (" ^ str ^")"
