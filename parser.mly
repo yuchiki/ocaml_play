@@ -9,7 +9,7 @@
 %token EOF EOL
 %token LPAREN RPAREN
 %token LET EQUAL LT LE GT GE OR AND NOT NEQ
-%token LOAD
+%token LOAD TYPE COLON
 %left OR
 %left AND
 %left LT LE GT GE EQ NEQ
@@ -27,6 +27,7 @@ main:
  |exp EOL {$1}
  |LET ID EQUAL exp EOL {Let($2,$4)}
  |LOAD ID EOL{Load($2)}
+ |COLON TYPE exp EOL {Type($3)}
 ;
 exp:
  | INT

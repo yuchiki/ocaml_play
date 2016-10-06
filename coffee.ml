@@ -1,4 +1,5 @@
 open Syntax
+open Type
 
 let isDebug=true
 
@@ -97,13 +98,15 @@ let _=
       print_string ">";flush stdout;
       let lexbuf = Lexing.from_channel !ch in
       let expr = Parser.main Lexer.token lexbuf in
-      if expr =Empty then () else(
+      match expr with
+      | Empty -> ()
+      | Type e -> print_string ((print_type (type_check e))^"\n")
+      | _ -> (
 	let result=eval expr env 0 in
 	print_value result;
 	print_newline();
 	flush stdout;
-	ch := next_channel result !ch
-      )
+	ch := next_channel result !ch)
     with
     |Lexer.Eof ->
       ch := stdin;

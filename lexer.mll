@@ -29,5 +29,7 @@ rule token = parse
     | "||"        {OR}
     | "&&"        {AND}
     | "load"      {LOAD}
+    | "t"         {TYPE}
+    | ":"         {COLON}
     | ['A'-'Z' 'a'-'z' '_']['A'-'Z' 'a'-'z' '_' '0'-'9']* {ID(Lexing.lexeme lexbuf)}
     | eof         {raise Eof}

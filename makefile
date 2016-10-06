@@ -5,8 +5,9 @@ main:
 	ocamlc -c parser.mli
 	ocamlc -c lexer.ml
 	ocamlc -c parser.ml
+	ocamlc -c type.ml
 	ocamlc -c coffee.ml
-	ocamlc -o coffee syntax.cmo lexer.cmo parser.cmo coffee.cmo
+	ocamlc -o coffee syntax.cmo lexer.cmo parser.cmo type.cmo coffee.cmo
 
 clean:
 	rm *.cmo

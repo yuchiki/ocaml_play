@@ -18,6 +18,7 @@ type t =
 |Or of (t*t)
 |Load of string
 |Empty
+|Type of t
 
 let rec string_of_expr t=
   match t with
